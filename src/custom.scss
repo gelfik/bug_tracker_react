@@ -1,0 +1,71 @@
+$dark: #474646;
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "mixins";
+
+p {
+  margin-bottom: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+a {
+  color: $dark;
+  text-decoration: auto;
+
+  &:hover {
+    color: $dark;
+  }
+}
+
+.NavContentEnd {
+  flex-grow: 0;
+}
+
+.System {
+  .Title {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .Status {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+//.navbar{
+//  min-height: 40px;
+//  height: 40px;
+//}
+
+.FlexStartEnd {
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-end;
+}
+
+.Valid {
+  color: green;
+}
+
+.InValid {
+  color: darkred;
+}
+
+.Bug {
+  font-size: 14px;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: #e92f2f;
+    }
+  }
+}
