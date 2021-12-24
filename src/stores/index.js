@@ -8,6 +8,7 @@ import LoginStore from "./LoginStore";
 import UiStore from "./UiStore";
 import SystemListStore from "./SystemListStore";
 import SystemStore from "./SystemStore";
+import DictionaryStore from "./DictionaryStore";
 
 
 class RootStore {
@@ -19,6 +20,8 @@ class RootStore {
         this.modalStore = new ModalStore();
         this.registerStore = new RegisterStore(this.$axios, this.userStore);
         this.loginStore = new LoginStore(this.$axios);
+
+        this.dictionaryStore = new DictionaryStore(this.$axios);
 
         this.systemListStore = new SystemListStore(this.$axios);
         this.systemStore = new SystemStore(this.$axios);

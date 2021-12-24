@@ -1,7 +1,7 @@
 import React from "react";
 import {inject, observer} from "mobx-react";
 import {Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import {getStatusType, getStatusValid} from "../../../utils/StatusNameService";
+import {getStatusValid} from "../../../utils/StatusNameService";
 import BugBlock from "./BugBlock";
 
 const ModuleBlock = inject('userStore', 'systemStore', 'modalStore')(observer((store) => {
@@ -33,7 +33,7 @@ const ModuleBlock = inject('userStore', 'systemStore', 'modalStore')(observer((s
                             <p><strong>Статус:</strong></p>
                         </Col>
                         <Col md={10}>
-                            <p className={getStatusValid(item?.status_type)}>{getStatusType(item?.status_type)}</p>
+                            <p className={getStatusValid(item?.status_type?.key)}>{item?.status_type?.title}</p>
                         </Col>
                     </Row>
                     <Row>

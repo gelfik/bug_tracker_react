@@ -2,6 +2,7 @@ import React from "react";
 import {inject, observer} from "mobx-react";
 import Modal from "react-bootstrap/Modal";
 import ErrorAlert from "../ErrorAlert";
+import {MODAL_LOGIN, MODAL_REGISTER} from "./ModalType";
 
 const LoginModal = inject('userStore', 'modalStore', 'loginStore')(observer((stores) => {
     const {userStore, modalStore, loginStore} = stores;
@@ -11,16 +12,11 @@ const LoginModal = inject('userStore', 'modalStore', 'loginStore')(observer((sto
         userStore.login(loginStore.regData)
     }
 
-    const openRegisterModal = () => {
-        modalStore.LoginModalClose();
-        modalStore.RegisterModalShow();
-    }
-
     return (
-        <Modal show={modalStore.LoginModalStatus} centered onHide={modalStore.LoginModalClose}>
+        <Modal show={(modalStore.status && modalStore.type === MODAL_LOGIN)} centered onHide={modalStore.close}>
             <Modal.Header>
                 <Modal.Title>Вход в систему</Modal.Title>
-                <button type="button" className="btn-close" aria-label="Close" onClick={modalStore.LoginModalClose}/>
+                <button type="button" className="btn-close" aria-label="Close" onClick={modalStore.close}/>
             </Modal.Header>
             <Modal.Body>
                 <form className={'d-flex flex-column'} onSubmit={onSubmitRegister}>
@@ -34,7 +30,7 @@ const LoginModal = inject('userStore', 'modalStore', 'loginStore')(observer((sto
                     {userStore.errors?.detail && <ErrorAlert error={userStore.errors?.detail}/>}
                     <div className={'w-100 d-flex justify-content-center'}>
                         <p className="text-center">Нет учетной записи?</p>
-                        <div onClick={openRegisterModal} className={'link ms-2'}>Регистрация</div>
+                        <div onClick={() => modalStore.open(MODAL_REGISTER)} className={'link ms-2'}>Регистрация</div>
                     </div>
                     <button type="submit" className="btn btn-dark" disabled={!loginStore.isButtonDisabled}>Войти
                     </button>

@@ -5,8 +5,8 @@ import {useHistory, useParams} from "react-router-dom";
 import SystemBlock from "./components/SystemBlock";
 import ModuleBlock from "./components/ModuleBlock";
 
-const SystemPage = inject('userStore', 'modalStore', 'systemStore')(observer((stores) => {
-    const { systemStore} = stores;
+const SystemPage = inject('userStore', 'modalStore', 'systemStore', 'dictionaryStore')(observer((stores) => {
+    const { userStore, systemStore, dictionaryStore} = stores;
     const history = useHistory();
     const queryParams = useParams()
     
@@ -24,6 +24,13 @@ const SystemPage = inject('userStore', 'modalStore', 'systemStore')(observer((st
         systemStore.loadSystemData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [systemStore.filters.filter])
+
+    useEffect(() => {
+        if (userStore.userAuthStatus) {
+            dictionaryStore.loadAllList()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
 
     return (

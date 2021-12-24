@@ -1,7 +1,6 @@
 import React from "react";
 import {inject, observer} from "mobx-react";
 import {Accordion, Col, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import {getPriorityType, getProblemType} from "../../../utils/StatusNameService";
 
 const BugBlock = inject('userStore', 'systemStore', 'modalStore')(observer((store) => {
     const {bugs} = store
@@ -62,7 +61,7 @@ const BugBlock = inject('userStore', 'systemStore', 'modalStore')(observer((stor
                             <p><strong>Проблема:</strong></p>
                         </Col>
                         <Col md={9}>
-                            <p>{getProblemType(item?.problem_type)}</p>
+                            <p>{item?.problem_type?.title}</p>
                         </Col>
                     </Row>
                     <Row className={'mb-2'}>
@@ -70,7 +69,7 @@ const BugBlock = inject('userStore', 'systemStore', 'modalStore')(observer((stor
                             <p><strong>Приоритет:</strong></p>
                         </Col>
                         <Col md={9}>
-                            <p>{getPriorityType(item?.priority_type)}</p>
+                            <p>{item?.priority_type?.title}</p>
                         </Col>
                     </Row>
                     <Row className={'mb-2'}>

@@ -1,0 +1,3 @@
+export const MODAL_LOGIN = 'LOGIN';
+export const MODAL_REGISTER = 'REGISTER';
+export const MODAL_ADD_SUB_SYSTEM = 'MODAL_ADD_SUB_SYSTEM';

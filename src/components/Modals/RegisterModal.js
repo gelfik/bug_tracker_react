@@ -2,6 +2,7 @@ import React from "react";
 import {inject, observer} from "mobx-react";
 import Modal from "react-bootstrap/Modal";
 import ErrorAlert from "../ErrorAlert";
+import {MODAL_LOGIN, MODAL_REGISTER} from "./ModalType";
 
 const RegisterModal = inject('userStore', 'modalStore', 'registerStore')(observer((stores) => {
     const {userStore, modalStore, registerStore} = stores;
@@ -11,16 +12,12 @@ const RegisterModal = inject('userStore', 'modalStore', 'registerStore')(observe
         userStore.registration(registerStore.regData)
     }
 
-    const openLoginModal = () => {
-        modalStore.RegisterModalClose();
-        modalStore.LoginModalShow();
-    }
 
     return (
-        <Modal show={modalStore.RegisterModalStatus} centered onHide={modalStore.RegisterModalClose}>
+        <Modal show={(modalStore.status && modalStore.type === MODAL_REGISTER)} centered onHide={modalStore.close}>
             <Modal.Header>
                 <Modal.Title>Регистрация</Modal.Title>
-                <button type="button" className="btn-close" aria-label="Close" onClick={modalStore.RegisterModalClose}/>
+                <button type="button" className="btn-close" aria-label="Close" onClick={modalStore.close}/>
             </Modal.Header>
             <Modal.Body>
                 <form className={'d-flex flex-column'} onSubmit={onSubmitRegister}>
@@ -40,7 +37,7 @@ const RegisterModal = inject('userStore', 'modalStore', 'registerStore')(observe
                     {userStore.errors?.detail && <ErrorAlert error={userStore.errors?.detail}/>}
                     <div className={'w-100 d-flex justify-content-center'}>
                         <p className="text-center">Есть учетная запись?</p>
-                        <div onClick={openLoginModal} className={'link ms-2'}>Войти</div>
+                        <div onClick={() => modalStore.open(MODAL_LOGIN)} className={'link ms-2'}>Войти</div>
                     </div>
                     <button type="submit" className="btn btn-dark"
                             disabled={!registerStore.isButtonDisabled}>Регистрация

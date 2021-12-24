@@ -1,10 +1,12 @@
 import {action, computed, makeObservable, observable, toJS} from "mobx";
 import FilterStore from "./FilterStore";
+import LoadStatusStore from "./LoadStatusStore";
 
 export default class SystemListStore {
     _systemList = []
-    _productList = []
     _filters = new FilterStore()
+
+    _load = new LoadStatusStore()
 
     constructor($client) {
         makeObservable(this, {
@@ -13,13 +15,13 @@ export default class SystemListStore {
             setSystemList: action,
             loadSystemList: action,
 
-            _productList: observable,
-            productList: computed,
-            setProductList: action,
-            loadProductList: action,
+            loadSubSystemAdd: action,
 
             _filters: observable,
             filters: computed,
+
+            _load: observable,
+            load: computed,
         })
         this.client = $client;
     }
@@ -27,6 +29,11 @@ export default class SystemListStore {
     get filters() {
         return this._filters;
     }
+
+    get load() {
+        return this._load;
+    }
+
 
     get systemList() {
         return toJS(this._systemList);
@@ -43,18 +50,22 @@ export default class SystemListStore {
             })
     }
 
-    get productList() {
-        return toJS(this._productList);
-    }
 
-    setProductList = (value) => {
-        this._productList = value
-    }
-
-    loadProductList = () => {
-        return this.client.get(`/product`)
+    loadSubSystemAdd = (data) => {
+        return this.client.post(`/system/add`, data)
             .then(response => {
-                this.setProductList(response.data)
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(errors => {
+                if (errors.response.data?.errors) {
+                    this.load?.setError(errors.response.data?.errors)
+                }
+                if (errors.response.data?.detail) {
+                    this.load?.setError({error: errors.response.data?.detail})
+                }
+                if (errors.response.data?.error) {
+                    this.load?.setError({error: errors.response.data?.error})
+                }
             })
     }
 }

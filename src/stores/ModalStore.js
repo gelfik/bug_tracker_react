@@ -1,41 +1,38 @@
 import {action, computed, makeObservable, observable} from "mobx"
 
 export default class ModalStore {
-    _showLoginModalStatus = false
-    _showRegisterModalStatus = false
+    _status = false
+    _type = ''
 
     constructor() {
         makeObservable(this, {
-            _showLoginModalStatus: observable,
-            _showRegisterModalStatus: observable,
-            LoginModalStatus: computed,
-            RegisterModalStatus: computed,
-            LoginModalClose: action,
-            LoginModalShow: action,
-            RegisterModalClose: action,
-            RegisterModalShow: action,
+            _status: observable,
+            _type: observable,
+            status: computed,
+            type: computed,
+            open: action,
+            close: action,
         })
     }
 
-    get LoginModalStatus() {
-        return this._showLoginModalStatus;
+    get status() {
+        return this._status;
     }
 
-    get RegisterModalStatus() {
-        return this._showRegisterModalStatus;
+    get type() {
+        return this._type;
     }
 
-    LoginModalClose = () => {
-        this._showLoginModalStatus = false;
-    }
-    LoginModalShow = () => {
-        this._showLoginModalStatus = true;
+    close = () => {
+        this._status = false;
+        this._type = '';
     }
 
-    RegisterModalClose = () => {
-        this._showRegisterModalStatus = false;
-    }
-    RegisterModalShow = () => {
-        this._showRegisterModalStatus = true;
+    open = (value) => {
+        this._status = true;
+        this._type = value;
     }
 }
+
+export const MODAL_LOGIN = 'LOGIN';
+export const MODAL_REGISTER = 'REGISTER';
