@@ -21,8 +21,17 @@ const BugBlock = inject('userStore', 'systemStore', 'modalStore')(observer((stor
                             <h6>{item.title}</h6>
                         </Col>
                         <Col md={1} xs={2} className={'FlexStartEnd'}>
-                            <OverlayTrigger key='bottom' placement='bottom' overlay={
-                                <Tooltip id={`tooltip-edit-system`}>
+                            <OverlayTrigger placement='bottom' overlay={
+                                <Tooltip id={`tooltip-delete-bug`}>
+                                    Удалить модуль
+                                </Tooltip>
+                            }>
+                                <svg width="24" height="24" onClick={() => console.log(1111)}>
+                                    <use xlinkHref={'#icon-delete'}/>
+                                </svg>
+                            </OverlayTrigger>
+                            <OverlayTrigger placement='bottom' overlay={
+                                <Tooltip id={`tooltip-edit-bug`}>
                                     Редактировать баг
                                 </Tooltip>
                             }>
@@ -92,7 +101,7 @@ const BugBlock = inject('userStore', 'systemStore', 'modalStore')(observer((stor
                     <h5>Баги</h5>
                 </Col>
                 <Col md={1} xs={2} className={'FlexStartEnd'}>
-                    <OverlayTrigger key='bottom' placement='bottom' overlay={
+                    <OverlayTrigger placement='bottom' overlay={
                         <Tooltip id={`tooltip-edit-system`}>
                             Добавить баг
                         </Tooltip>

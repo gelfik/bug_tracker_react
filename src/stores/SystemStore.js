@@ -5,6 +5,7 @@ import FilterStore from "./FilterStore";
 export default class SystemStore {
     _systemData = []
     _systemID = null
+    _moduleID = null
 
     _filters = new FilterStore()
     _load = new LoadStatusStore();
@@ -14,11 +15,22 @@ export default class SystemStore {
             _systemData: observable,
             systemData: computed,
             setSystemData: action,
+
             loadSystemData: action,
+            loadSystemEdit: action,
+            loadSystemDelete: action,
+
+            loadModuleAdd: action,
+            loadModuleEdit: action,
+            loadModuleDelete: action,
 
             _systemID: observable,
             systemID: computed,
             setSystemID: action,
+
+            _moduleID: observable,
+            moduleID: computed,
+            setModuleID: action,
 
             _filters: observable,
             filters: computed,
@@ -55,6 +67,20 @@ export default class SystemStore {
         }
     }
 
+    get moduleID() {
+        return toJS(this._moduleID);
+    }
+
+    get moduleData() {
+        return toJS(this.systemData?.modules?.find((item) => item.id === this.moduleID));
+    }
+
+    setModuleID = (value, force = false) => {
+        if ((this.moduleID !== value) || (force)) {
+            this._moduleID = value
+        }
+    }
+
     loadSystemData = (params = '') => {
         return this.client.get(`/system${this.systemID}`, {params: this.filters.filterData})
             .then(response => {
@@ -64,5 +90,78 @@ export default class SystemStore {
             })
     }
 
+    loadSystemEdit = (data) => {
+        return this.client.put(`/system${this.systemID}`, data)
+            .then(response => {
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(errors => {
+                if (errors.response.data?.errors) {
+                    this.load?.setError(errors.response.data?.errors)
+                }
+                if (errors.response.data?.detail) {
+                    this.load?.setError({error: errors.response.data?.detail})
+                }
+                if (errors.response.data?.error) {
+                    this.load?.setError({error: errors.response.data?.error})
+                }
+            })
+    }
 
+    loadSystemDelete = () => {
+        return this.client.delete(`/system${this.systemID}`)
+            .then(response => {
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(error => {
+                this.load.setError(error)
+            })
+    }
+
+
+    loadModuleAdd = (data) => {
+        return this.client.post(`/system${this.systemID}/add`, data)
+            .then(response => {
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(errors => {
+                if (errors.response.data?.errors) {
+                    this.load?.setError(errors.response.data?.errors)
+                }
+                if (errors.response.data?.detail) {
+                    this.load?.setError({error: errors.response.data?.detail})
+                }
+                if (errors.response.data?.error) {
+                    this.load?.setError({error: errors.response.data?.error})
+                }
+            })
+    }
+
+    loadModuleEdit = (data) => {
+        return this.client.put(`/system${this.systemID}/module${this.moduleID}`, data)
+            .then(response => {
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(errors => {
+                if (errors.response.data?.errors) {
+                    this.load?.setError(errors.response.data?.errors)
+                }
+                if (errors.response.data?.detail) {
+                    this.load?.setError({error: errors.response.data?.detail})
+                }
+                if (errors.response.data?.error) {
+                    this.load?.setError({error: errors.response.data?.error})
+                }
+            })
+    }
+
+    loadModuleDelete = () => {
+        return this.client.delete(`/system${this.systemID}/module${this.moduleID}`)
+            .then(response => {
+                this.load.setStatus(false)
+                this.load.setResult(response.data)
+            }).catch(error => {
+                this.load.setError(error)
+            })
+    }
 }

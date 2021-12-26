@@ -1,25 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import Modal from "react-bootstrap/Modal";
-import {useHistory} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import {MODAL_ADD_SUB_SYSTEM} from "./ModalType";
+import {MODAL_ADD_MODULE} from "./ModalType";
 import {FloatingLabel, Form} from "react-bootstrap";
 
-const SubSystemAddModal = inject('userStore', 'modalStore', 'systemListStore', 'dictionaryStore', 'systemStore')(observer((stores) => {
-    const {modalStore, systemListStore, dictionaryStore, systemStore} = stores;
-
+const ModuleAddModal = inject('userStore', 'modalStore', 'dictionaryStore', 'systemStore')(observer((stores) => {
+    const {modalStore, dictionaryStore, systemStore} = stores;
     const {register, handleSubmit, reset} = useForm();
-    const history = useHistory();
 
     const onSubmitAdd = (data) => {
-        systemListStore.loadSubSystemAdd(data).then(() => {
-            if (!systemListStore.load?.status) {
+        systemStore.loadModuleAdd(data).then(() => {
+            if (!systemStore.load?.status) {
                 reset()
-                systemStore.setSystemID(systemListStore.load?.result?.id)
                 systemStore.loadSystemData()
-                history.push(`/system${systemListStore.load?.result?.id}`)
-                systemListStore.load.clear()
+                systemStore.load.clear()
                 modalStore.close()
             }
         })
@@ -32,39 +27,31 @@ const SubSystemAddModal = inject('userStore', 'modalStore', 'systemListStore', '
         )
     }
 
-    const getItemProduct = () => {
-        return dictionaryStore?.productList?.map((item, i) =>
-            <option key={i} value={item.id}>{item.title}</option>
-        )
-    }
+
+    useEffect(() => {
+        if (modalStore.status) {
+            reset()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalStore.status])
 
 
     return (
-        <Modal show={modalStore.status && modalStore.type === MODAL_ADD_SUB_SYSTEM} centered
+        <Modal show={modalStore.status && modalStore.type === MODAL_ADD_MODULE} centered
                onHide={modalStore.close}>
             <Modal.Header>
-                <Modal.Title>Добавление подсистемы</Modal.Title>
+                <Modal.Title>Добавление модуля</Modal.Title>
                 <button type="button" className="btn-close" aria-label="Close"
                         onClick={modalStore.close}/>
             </Modal.Header>
             <Modal.Body>
                 <form className={'d-flex flex-column'} onSubmit={handleSubmit(onSubmitAdd)}>
                     <div className="col-lg-12 col-12 mb-3">
-                        <FloatingLabel controlId="floatingProduct" label="Продукт">
-                            <Form.Select defaultValue={''} {...register("product", {valueAsNumber: true})}
-                                         aria-label="Продукт">
-                                {getItemProduct()}
-                            </Form.Select>
-                        </FloatingLabel>
-                        {systemListStore?.load?.error && systemListStore?.load?.error['product'] &&
-                        <p className={'custom-alert-danger-text'}>{systemListStore?.load?.error['product']}</p>}
-                    </div>
-                    <div className="col-lg-12 col-12 mb-3">
                         <FloatingLabel controlId="floatingTitle" label="Название">
                             <Form.Control type="text"  {...register("title")} placeholder="Название" required/>
                         </FloatingLabel>
-                        {systemListStore?.load?.error && systemListStore?.load?.error['title'] &&
-                        <p className={'custom-alert-danger-text'}>{systemListStore?.load?.error['title']}</p>}
+                        {systemStore?.load?.error && systemStore?.load?.error['title'] &&
+                        <p className={'custom-alert-danger-text'}>{systemStore?.load?.error['title']}</p>}
                     </div>
                     <div className="col-lg-12 col-12 mb-3">
                         <FloatingLabel controlId="floatingStatusType" label="Статус">
@@ -73,8 +60,8 @@ const SubSystemAddModal = inject('userStore', 'modalStore', 'systemListStore', '
                                 {getItemStatus()}
                             </Form.Select>
                         </FloatingLabel>
-                        {systemListStore?.load?.error && systemListStore?.load?.error['status_type'] &&
-                        <p className={'custom-alert-danger-text'}>{systemListStore?.load?.error['status_type']}</p>}
+                        {systemStore?.load?.error && systemStore?.load?.error['status_type'] &&
+                        <p className={'custom-alert-danger-text'}>{systemStore?.load?.error['status_type']}</p>}
                     </div>
                     <div className="col-lg-12 col-12 mb-3">
                         <div className="form-floating ">
@@ -83,8 +70,8 @@ const SubSystemAddModal = inject('userStore', 'modalStore', 'systemListStore', '
                                       placeholder={'Комментарий'}/>
                             <label htmlFor={'shortDescription'}>Комментарий</label>
                         </div>
-                        {systemListStore?.load?.error && systemListStore?.load?.error['description'] &&
-                        <p className={'custom-alert-danger-text'}>{systemListStore?.load?.error['description']}</p>}
+                        {systemStore?.load?.error && systemStore?.load?.error['description'] &&
+                        <p className={'custom-alert-danger-text'}>{systemStore?.load?.error['description']}</p>}
                     </div>
                     <button type={"submit"} className={'btn btn-dark'}>Добавить</button>
                 </form>
@@ -93,4 +80,4 @@ const SubSystemAddModal = inject('userStore', 'modalStore', 'systemListStore', '
     )
 }))
 
-export default SubSystemAddModal;
+export default ModuleAddModal;

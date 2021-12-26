@@ -1,4 +1,4 @@
-$dark: #474646;
+$dark: #000000;
 
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
@@ -16,7 +16,7 @@ p {
 
 a {
   color: $dark;
-  text-decoration: auto;
+  text-decoration: unset;
 
   &:hover {
     color: $dark;
