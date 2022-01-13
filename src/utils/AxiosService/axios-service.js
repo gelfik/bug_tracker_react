@@ -2,8 +2,9 @@ import axios from "axios";
 
 const initAxios = (tokenStore) => {
     const $axios = axios.create({
-        // baseURL: 'https://bugtracker.gelfik.dev/api'
-        baseURL: 'http://192.168.1.64:8000/api'
+        baseURL: 'https://bugtracker.gelfik.dev/api'
+        // baseURL: 'http://192.168.1.64:8000/api'
+        // baseURL: 'http://localhost:8000/api'
     })
     $axios.defaults.headers.post['Content-Type'] = 'application/json';
     $axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
